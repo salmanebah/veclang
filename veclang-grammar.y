@@ -27,7 +27,7 @@
 %token NEQ  "<>"
 %token GEQ   ">="
 %token LEQ   "<="
-%token START FINISH IMAGE IF ELSE
+%token IMAGE IF ELSE
 %token PATH SCAL PICT TRANSLATE ROTATE
 %token <var> SCAL_ID PATH_ID PICT_ID
 %token <id_name> ID
@@ -36,10 +36,11 @@
 %type <node> list_of_instructions instruction command param /*assignment*/ image
 %type <node> relative_param expr point test
 
+%left "<=" ">=" "<>" '=' '<' '>'
 %left '+' '-'
 %left '*' '/'
 %nonassoc ":="
-%left NEG
+ %left NEG
 %start program
 
 %%

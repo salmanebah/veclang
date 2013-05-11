@@ -73,11 +73,6 @@ SPACE [[:blank:]]*
 "else"                 { DO_DEBUG;
                          return ELSE;}
 
-"START"                { DO_DEBUG;
-                         return START;}
-
-"FINISH"               { DO_DEBUG;
-                         return FINISH;}
 
 "@<"                   { BEGIN(COMMENT_MODE);}
 
