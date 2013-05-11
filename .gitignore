@@ -6,4 +6,5 @@ veclang-lexer.[hc]
 veclang-grammar.[hc]
 veclang-grammar.dot
 *.vl
+*.pdf
 demo.c

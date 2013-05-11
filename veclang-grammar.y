@@ -46,7 +46,7 @@
 
 
 program : /* empty rule */ 
-        | START list_of_instructions FINISH                           {*root = $2;}
+        | list_of_instructions                            {*root = $1;}
         ;
 
 list_of_instructions : instruction ';'                        {$$ = $1;}

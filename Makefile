@@ -1,4 +1,5 @@
 CC = gcc
+this ?= demo
 CFLAGS = -g -std=c99 -w
 LDFLAGS = -lfl -lm
 FLEX = flex
@@ -37,9 +38,9 @@ debug-ast : ast.c
 
 
 draw : $(EXEC)
-	./$< demo.vl
-	$(CC) demo.c `pkg-config --cflags --libs cairo` -o demo
-	./demo
+	./$< $(this).vl
+	$(CC) $(this).c `pkg-config --cflags --libs cairo` -o $(this)
+	./$(this)
 	evince output.pdf
 
 .PHONY: clean distclean

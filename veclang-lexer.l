@@ -6,7 +6,6 @@
      #include "scope_management.h"
      extern scope_tab global_scope;
      int debug_flag = 0;
-     #define BUF_LEN 100
      #define DO_DEBUG  if (debug_flag == 1)			\
 	                        printf("%s " , yytext)
      int erreur_lexicale(char* message)
@@ -14,15 +13,18 @@
 	  fprintf(stderr,"lexical error on line %d : %s (unknown token)\n", yylineno , message);
 	  exit(EXIT_FAILURE);
      }
-     char filename[30]={'\0'};
-     char buffer[BUF_LEN];
+     #define MAX_EXECUTE_LEVEL 20
+     YY_BUFFER_STATE execute_stack[MAX_EXECUTE_LEVEL];
+     execute_stack_pointer = 0;
+     char filename[30] = {'\0'};
      FILE* in;
+     FILE* default_in;
      int i = 0;
 %}
 
 SPACE [[:blank:]]*
 %x COMMENT_MODE
-%x LOAD_MODE
+%x EXECUTE_MODE
 %option yylineno
 
 %%
@@ -79,8 +81,8 @@ SPACE [[:blank:]]*
 
 "@<"                   { BEGIN(COMMENT_MODE);}
 
-^{SPACE}"load"{SPACE}\"                 { i = 0;
-                                          BEGIN(LOAD_MODE);}
+^{SPACE}"execute"{SPACE}\"                 { i = 0;
+                                             BEGIN(EXECUTE_MODE);}
 
 
 ":="                   { DO_DEBUG;
@@ -158,35 +160,44 @@ SPACE [[:blank:]]*
      .|\n            { /* ignore */} 
 }
 
-<LOAD_MODE>
+<EXECUTE_MODE>
 {
-     [^\"\n]          {filename[i++] = yytext[0];}
+     [^\"\n\t]          {filename[i++] = yytext[0];}
 
      \"                 { printf("filename get: %s\n" , filename);
 	                  in = fopen(filename , "r");
-	                               if (in != NULL)
-				       {
-					    while(!feof(in))
-					    {
-						 fgets(buffer,BUF_LEN , in);
-						 printf("%s" , buffer);
-//						 yy_scan_bytes(buffer , BUF_LEN);
-					    }
-					    printf("filename get and read\n");
-					    BEGIN(INITIAL);
-				       }
-				       else
-				       {
-					    printf("error while opening stream\n");
-					    yyterminate();
-				       }
+			       if (in != NULL)
+			       {
+				       printf("filename get and read\n");
+				       enter_new_scope(global_scope);
+				       execute_stack[execute_stack_pointer++] = YY_CURRENT_BUFFER;
+				       yy_switch_to_buffer(yy_create_buffer(in , YY_BUF_SIZE));
+				       BEGIN(INITIAL);
+			      	}
+			       else
+			       {
+					 printf("error while opening stream\n");
+					 yyterminate();
+				}
                                      
-                                     }
+                            }
 
      \n                       {erreur_lexicale("newline not allowed in load directive\n");}
-
+     
 
 }
+
+<<EOF>>                         { if (--execute_stack_pointer < 0)
+	                            yyterminate();
+                                  else
+				  {
+				       exit_scope(global_scope);
+				       yy_delete_buffer(YY_CURRENT_BUFFER);
+				       yy_switch_to_buffer(execute_stack[execute_stack_pointer]);
+				  }
+      
+                                    
+                                 }
 %%
 
 #ifdef DEBUG_LEXER
