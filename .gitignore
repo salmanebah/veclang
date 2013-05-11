@@ -1,0 +1,9 @@
+*.[o]
+*~
+vlcc
+veclang-grammar.output
+veclang-lexer.[hc]
+veclang-grammar.[hc]
+veclang-grammar.dot
+*.vl
+demo.c

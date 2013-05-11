@@ -23,7 +23,7 @@ veclang-grammar.c : veclang-grammar.y
 veclang-lexer.c : veclang-lexer.l symtab_management.c scope_management.c
 	$(FLEX) --header-file=$*.h -o $@ $<
 
-debug-lexer : veclang-lexer.c veclang-lexer.h
+debug-lexer : veclang-lexer.c veclang-lexer.h 
 	$(CC) $< -o debug-lexer $(LDFLAGS) -DDEBUG_LEXER
 
 debug-grammar : veclang-grammar.c veclang-lexer.c ast.c symtab_management.c scope_management.c queue_list.c code_generation.c

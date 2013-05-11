@@ -6,6 +6,7 @@
      #include "scope_management.h"
      extern scope_tab global_scope;
      int debug_flag = 0;
+     #define BUF_LEN 100
      #define DO_DEBUG  if (debug_flag == 1)			\
 	                        printf("%s " , yytext)
      int erreur_lexicale(char* message)
@@ -13,10 +14,15 @@
 	  fprintf(stderr,"lexical error on line %d : %s (unknown token)\n", yylineno , message);
 	  exit(EXIT_FAILURE);
      }
-
+     char filename[30]={'\0'};
+     char buffer[BUF_LEN];
+     FILE* in;
+     int i = 0;
 %}
 
+SPACE [[:blank:]]*
 %x COMMENT_MODE
+%x LOAD_MODE
 %option yylineno
 
 %%
@@ -72,6 +78,9 @@
                          return FINISH;}
 
 "@<"                   { BEGIN(COMMENT_MODE);}
+
+^{SPACE}"load"{SPACE}\"                 { i = 0;
+                                          BEGIN(LOAD_MODE);}
 
 
 ":="                   { DO_DEBUG;
@@ -147,6 +156,36 @@
      ">@"            { BEGIN(INITIAL);}
      
      .|\n            { /* ignore */} 
+}
+
+<LOAD_MODE>
+{
+     [^\"\n]          {filename[i++] = yytext[0];}
+
+     \"                 { printf("filename get: %s\n" , filename);
+	                  in = fopen(filename , "r");
+	                               if (in != NULL)
+				       {
+					    while(!feof(in))
+					    {
+						 fgets(buffer,BUF_LEN , in);
+						 printf("%s" , buffer);
+//						 yy_scan_bytes(buffer , BUF_LEN);
+					    }
+					    printf("filename get and read\n");
+					    BEGIN(INITIAL);
+				       }
+				       else
+				       {
+					    printf("error while opening stream\n");
+					    yyterminate();
+				       }
+                                     
+                                     }
+
+     \n                       {erreur_lexicale("newline not allowed in load directive\n");}
+
+
 }
 %%
 
