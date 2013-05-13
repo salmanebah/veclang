@@ -1,4 +1,23 @@
-/* TODO: eval binary tree during it creation */
+/* Copyright (C) 2013 BAH Salmane, CHALAUX Benjamin , SOLLAUD Timothée/* 
+
+/* This file is part of Veclang: a toy compiler for vectorial drawing using the cairo library
+     Veclang is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Veclang is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>
+*/
+
+
+
+/*TODO: eval binary tree during it creation */
 #include "ast.h"
 #include <assert.h>
 #include <string.h>
@@ -7,7 +26,6 @@
 #include "code_generation.h"
 #define RADIAN 0.0174532925
 //static char* tree_to_dot_aux(FILE* , ast );
-/* deep copy of the given node */
 static void apply_translation_aux(ast param , int dx , int dy);
 static void apply_rotation_aux(ast param , int cx , int cy , float angle);
 static void sim_mark(int n)

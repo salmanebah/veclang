@@ -1,3 +1,19 @@
+# Copyright (C) 2013 BAH Salmane, CHALAUX Benjamin , SOLLAUD Timothée/* 
+
+#  This file is part of Veclang: a toy compiler for vectorial drawing using the cairo library
+#    Veclang is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+
+#  Veclang is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+
+#  You should have received a copy of the GNU General Public License
+#  along with Foobar.  If not, see <http://www.gnu.org/licenses/>
+
 CC = gcc
 this ?= demo
 CFLAGS = -g -std=c99 -w
@@ -47,6 +63,10 @@ draw : $(EXEC)
 clean:
 	rm -f veclang-lexer.c
 	rm -f veclang-grammar.c
+	rm -f veclang-grammar.h
+	rm -f veclang-lexer.h
+	rm -f veclang-grammar.output
+	rm -f veclang-grammar.dot
 	rm -f *.o*
 distclean:
 	rm -f $(EXEC)
