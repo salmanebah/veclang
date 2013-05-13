@@ -40,7 +40,7 @@
 %left '+' '-'
 %left '*' '/'
 %nonassoc ":="
- %left NEG
+%left NEG
 %start program
 
 %%
@@ -84,14 +84,14 @@ assignment : PATH_ID ":=" param                   {if (check_in_scope(global_sco
                                              /*ast node = create_var_func_node(get_var_name($1));
                                              $$ = create_internal_node("path_assignment" , node , $3);*/}
 
-| SCAL_ID ":=" expr               {if (check_in_scope(global_scope , get_var_name($1)) == true)
-	                                set_scal_value($1 , eval_binary_ast($3));
-                                   else
-				   {
-					add_symbol(global_scope , get_var_name($1) , get_var_type($1));
-					variable var = find_symbol(global_scope , get_var_name($1));
-					set_scal_value(var , eval_binary_ast($3));
-				   }
+           | SCAL_ID ":=" expr               {if (check_in_scope(global_scope , get_var_name($1)) == true)
+	                                          set_scal_value($1 , eval_binary_ast($3));
+                                             else
+			               	      {
+						   add_symbol(global_scope , get_var_name($1) , get_var_type($1));
+						   variable var = find_symbol(global_scope , get_var_name($1));
+						   set_scal_value(var , eval_binary_ast($3));
+					      }
                                              /*ast node = create_var_func_node(get_var_name($1));
                                              $$ = create_internal_node("scal_assignment" , node , $3);*/}
 
@@ -211,10 +211,10 @@ expr : NB                          {$$ = create_number_node($1);}
 
      | expr '+' expr              {$$ = create_binary_node('+' , $1 , $3);}
      | expr '-' expr              {$$ = create_binary_node('-' , $1 , $3);}
+     | '-' expr %prec NEG         {$$ = create_binary_node('-' , NULL , $2);}
      | expr '*' expr              {$$ = create_binary_node('*' , $1 , $3);}        
      | expr '/' expr              {$$ = create_binary_node('/' , $1 , $3);}        
      | '(' expr ')'               {$$ = $2;}
-     | '-' expr %prec NEG         {$$ = create_binary_node('-' , NULL , $2);}
      | expr '<' expr              {$$ = create_binary_node('<', $1, $3);}
      | expr "<=" expr             {$$ = create_binary_node('l', $1, $3);}
      | expr '>' expr              {$$ = create_binary_node('>', $1, $3);}        
