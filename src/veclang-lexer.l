@@ -32,7 +32,7 @@
      }
      #define MAX_EXECUTE_LEVEL 20
      YY_BUFFER_STATE execute_stack[MAX_EXECUTE_LEVEL];
-     execute_stack_pointer = 0;
+     int execute_stack_pointer = 0;
      char filename[30] = {'\0'};
      FILE* in;
      FILE* default_in;

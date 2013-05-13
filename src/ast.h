@@ -70,7 +70,8 @@ extern ast apply_translation(ast node);
 extern ast apply_rotation(ast node);
 /* deep copy of the given node */
 extern  ast clone_ast(ast node);
-
+/* convert ast to dot */
+extern void ast_to_dot(ast node);
 #endif
 
 

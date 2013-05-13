@@ -21,13 +21,15 @@
 #include "ast.h"
 #include <assert.h>
 #include <string.h>
-#include <stdio.h>
 #include <math.h>
 #include "code_generation.h"
 #define RADIAN 0.0174532925
-//static char* tree_to_dot_aux(FILE* , ast );
 static void apply_translation_aux(ast param , int dx , int dy);
 static void apply_rotation_aux(ast param , int cx , int cy , float angle);
+static char* ast_to_dot_aux (FILE* out , ast node);
+/* give a unique name to a node for dot */
+static char* different_node_name(char* node_name , int i);
+
 static void sim_mark(int n)
 {
      int i;
@@ -183,41 +185,57 @@ void print_ast (ast node , int padding)
      }
 	  
 }
-/*
-void tree_to_dot (ast node)
+
+void ast_to_dot (ast node)
 {
-     FILE* out = fopen("debug.dot" , "w+");
-     fprintf(out, "digraph debug {\n");
-     tree_to_dot_aux(out , node);
+     FILE* out = fopen("ast.dot" , "w+");
+     fprintf(out, "digraph G {\n");
+     ast_to_dot_aux(out , node);
      fprintf(out , "\n}");
+     fclose(out);
 }
 
      
-char* tree_to_dot_aux(FILE* out , ast node)
+char* ast_to_dot_aux(FILE* out , ast node)
 {
+     static int i = 0;
+     i++;
      if (node == NULL)
-	  return;
-     char* left , right;
+	  return different_node_name("NULL" ,i);
+     char* left;
+     char* right;
+     char* name;
      switch(node-> type)
      {
      case INTERNAL :
-	  left = tree_to_dot_aux(out , node-> left);
-	  right = tree_to_dot_aux(out , node-> right);
-	  fprintf(out,"%s -> %s;\n" , node-> node_name , left);
-	  fprintf(out , "%s -> %s;\n" , node-> node_name , right);
-	  return node-> node_name;
+	  name = different_node_name(node-> node_name,i);
+	  left = ast_to_dot_aux(out , node-> left);
+	  right = ast_to_dot_aux(out , node-> right);
+	  fprintf(out,"%s -> %s;\n" , name , left);
+	  fprintf(out , "%s -> %s;\n" , name , right);
+	  return name;
      case NUMBER :
-	  return "NUMBER";
+	  return different_node_name("NUMBER" , i);
      case FUNCTION :
-	  return "FUNCTION";
+	  return different_node_name(node-> node_name , i);
      case BINARY_OP :
-	  left = tree_to_dot_aux(out , node-> left);
-	  right = tree_to_dot_aux(out , node-> right);
-	  fprintf(out , "BINOP -> %s;" , left , right);
-	  fprintf(out, "BINOP -> %s;" , left , right);
-	  return "BINOP";
+	  name = different_node_name("BINOP" , i);
+	  left = ast_to_dot_aux(out , node-> left);
+	  right = ast_to_dot_aux(out , node-> right);
+	  fprintf(out , "BINOP -> %s;\n" , name , left);
+	  fprintf(out, "BINOP -> %s;\n" , name , right);
+	  return name;
      }
-     } */
+}
+char* different_node_name(char* node_name , int i)
+{
+     char* to_return = (char*)malloc(sizeof(strlen(node_name)) + 2);
+     assert(to_return != NULL);
+     sprintf(to_return , "%s_%d" , node_name , i);
+     return to_return;
+
+}
+ 
 void merge_param (ast param , ast relative_param)
 {
      assert(param != NULL);
@@ -230,6 +248,7 @@ void merge_param (ast param , ast relative_param)
 }
 ast clone_ast(ast node)
 {
+     static int i = 0;
      if (node == NULL)
 	  return;
      ast clone;
@@ -257,6 +276,7 @@ ast clone_ast(ast node)
 	  
      
 }
+
 
 ast apply_translation(ast node)
 {
@@ -354,7 +374,7 @@ int main(int argc, char *argv[])
      ast left = create_number_node(40);
      ast right = create_var_func_node("draw");
      ast root = create_internal_node("program" , right, left);
-     tree_to_dot(root);
+     ast_to_dot(root);
      free_ast(root);
      return EXIT_SUCCESS;
 }

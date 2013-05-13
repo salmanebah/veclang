@@ -92,12 +92,12 @@ list_of_id : ID                             {add_symbol(global_scope , $1 , $<v_
            ;
 
 assignment : PATH_ID ":=" param                   {if (check_in_scope(global_scope , get_var_name($1)) == true)
-	                                               set_scal_value($1 , $3);
+	                                               set_path_value($1 , $3);
                                                    else
 						   {
 							add_symbol(global_scope , get_var_name($1) , get_var_type($1));
 							variable var = find_symbol(global_scope , get_var_name($1));
-							set_scal_value(var , $3);
+							set_path_value(var , $3);
 						   }
                                              /*ast node = create_var_func_node(get_var_name($1));
                                              $$ = create_internal_node("path_assignment" , node , $3);*/}
@@ -114,12 +114,12 @@ assignment : PATH_ID ":=" param                   {if (check_in_scope(global_sco
                                              $$ = create_internal_node("scal_assignment" , node , $3);*/}
 
            | PICT_ID ":=" image                    {if (check_in_scope(global_scope , get_var_name($1)) == true)
-	                                               set_scal_value($1 , $3);
+	                                               set_path_value($1 , $3);
                                                     else
 						    {
 							 add_symbol(global_scope , get_var_name($1) , get_var_type($1));
 							 variable var = find_symbol(global_scope , get_var_name($1));
-							 set_scal_value(var , $3);
+							 set_path_value(var , $3);
 				                    }
                                               /*ast node = create_var_func_node(get_var_name($1));
                                               $$ = create_internal_node("pict_assignment" , node , $3);*/}
@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
      yyparse(&root);
      if (root != NULL)
 	  print_ast(root , 0);
-//     tree_to_dot(root);
+     ast_to_dot(root);
      return EXIT_SUCCESS;
 }
 #endif
