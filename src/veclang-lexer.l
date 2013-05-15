@@ -91,7 +91,7 @@ SPACE [[:blank:]]*
                          return ELSE;}
 
 
-"@<"                   { BEGIN(COMMENT_MODE);}
+"/*"                   { BEGIN(COMMENT_MODE);}
 
 ^{SPACE}"execute"{SPACE}\"                 { i = 0;
                                              BEGIN(EXECUTE_MODE);}
@@ -167,7 +167,7 @@ SPACE [[:blank:]]*
 
 <COMMENT_MODE>
 {
-     ">@"            { BEGIN(INITIAL);}
+     "*/"            { BEGIN(INITIAL);}
      
      .|\n            { /* ignore */} 
 }
