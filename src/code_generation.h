@@ -22,7 +22,7 @@
 #include "queue.h"
 
 /* veclang code to c based code */
-extern void compile(ast root , char* output_name);
+extern void compile(ast root , FILE* out);
 /* get equivalent c filename from veclang filename */
 extern char* veclang_name_to_c_name(char* file);
 /* traverses the abstract syntax tree  and replace cartesian expression nodes and polar nodes with simple cartesian nodes */

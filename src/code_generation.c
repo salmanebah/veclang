@@ -41,13 +41,12 @@ static  void cartesian_expr_to_simple(ast root);
 static void ast_to_code_aux(ast param , FILE* file);
 
 
-void compile (ast root , char* output_name)
+void compile (ast root , FILE* out)
 {
      if (root == NULL)
 	  return;
      queue fifo = queue_create();
      queue lilo = queue_create();
-     FILE* out = fopen(output_name , "w+");
      initialize_code_gen(out);
      get_queue_command(root , fifo);
      get_queue_command(root , lilo);
