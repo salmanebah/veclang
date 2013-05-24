@@ -31,17 +31,20 @@ int main(int argc, char *argv[])
      ast root;
      global_scope = create_scope_tab();
      if (argc > 1)
+     {
+	  FILE* out;
 	  for (int i = 1 ; i < argc ; ++i)
 	  {
 	       yyin = fopen(argv[i] , "r");
 	       yyparse(&root);
 	       char* output = veclang_name_to_c_name(argv[i]);
-	       FILE* out = fopen(output , "w+");
+	       out = fopen(output , "w+");
 	       compile(root , out);
 	       if (root != NULL)
 		    free_ast(root);
-	       fclose(out);
 	  }
+	  fclose(out);
+     }
      else
      {
 	  yyparse(&root);
