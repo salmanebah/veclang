@@ -32,7 +32,7 @@ It can be transpiled to ```C``` by using:
 
 ```./vlcc example.vl```
 
-The transpilation will write the following ```C``` code to the ```example.c```
+The transpilation will write the following ```C``` code to ```example.c```
 
 ```c
 /* Automatically generated code */
