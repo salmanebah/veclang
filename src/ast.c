@@ -1,6 +1,6 @@
-/* Copyright (C) 2013 BAH Salmane, CHALAUX Benjamin , SOLLAUD Timothée/* 
+/* Copyright (C) 2013 BAH Salmane, CHALAUX Benjamin , SOLLAUD Timothée
 
-/* This file is part of Veclang: a toy compiler for vectorial drawing using the cairo library
+   This file is part of Veclang: a toy compiler for vectorial drawing using the cairo library
      Veclang is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -222,9 +222,11 @@ char* ast_to_dot_aux(FILE* out , ast node)
 	  name = different_node_name("BINOP" , i);
 	  left = ast_to_dot_aux(out , node-> left);
 	  right = ast_to_dot_aux(out , node-> right);
-	  fprintf(out , "BINOP -> %s;\n" , name , left);
-	  fprintf(out, "BINOP -> %s;\n" , name , right);
+	  fprintf(out , "%s -> %s;\n" , name , left);
+	  fprintf(out, "%s -> %s;\n" , name , right);
 	  return name;
+     default:
+	  break;
      }
 }
 char* different_node_name(char* node_name , int i)

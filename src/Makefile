@@ -1,4 +1,4 @@
-# Copyright (C) 2013 BAH Salmane, CHALAUX Benjamin , SOLLAUD Timothée/* 
+# Copyright (C) 2013 BAH Salmane, CHALAUX Benjamin , SOLLAUD Timothée
 
 #  This file is part of Veclang: a toy compiler for vectorial drawing using the cairo library
 #    Veclang is free software: you can redistribute it and/or modify
@@ -23,9 +23,6 @@ BISON = bison
 HEADER = $(wildcard *.h)
 OBJ = veclang-grammar.o veclang-lexer.o ast.o vlcc.o code_generation.o queue_list.o symtab_management.o scope_management.o
 EXEC = vlcc
-check-syntax:
-	$(CC) -o nul -S ${CHK_SOURCES}
-
 all: $(EXEC)
 
 $(EXEC): $(OBJ) 

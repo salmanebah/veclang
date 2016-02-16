@@ -1,6 +1,6 @@
-/* Copyright (C) 2013 BAH Salmane, CHALAUX Benjamin , SOLLAUD Timothée/* 
+/* Copyright (C) 2013 BAH Salmane, CHALAUX Benjamin , SOLLAUD Timothée
 
-/* This file is part of Veclang: a toy compiler for vectorial drawing using the cairo library
+   This file is part of Veclang: a toy compiler for vectorial drawing using the cairo library
      Veclang is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -39,11 +39,14 @@ int main(int argc, char *argv[])
 	       yyparse(&root);
 	       char* output = veclang_name_to_c_name(argv[i]);
 	       out = fopen(output , "w+");
+	       if (out == NULL) {
+		    printf("Error while opening file %s", output);
+		    exit(EXIT_FAILURE);
+	       }
 	       compile(root , out);
 	       if (root != NULL)
 		    free_ast(root);
 	  }
-	  fclose(out);
      }
      else
      {
