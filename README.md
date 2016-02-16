@@ -29,7 +29,9 @@ draw translate(pict1, (200,200));
 draw rotate(pict1, (200, 200), 90);
 ```
 It can be transpiled to ```C``` by using:
+
 ```./vlcc example.vl```
+
 The transpilation will write the following ```C``` code to the ```example.c```
 
 ```c
@@ -85,5 +87,5 @@ int main(int argc , char** argv )
 ```
 The file ```example.c``` can further be compiled to machine code:
 ```sh
-gcc example.c \`pkg-config --cflags --libs cairo\` -o example
+gcc example.c `pkg-config --cflags --libs cairo` -o example
 ```
